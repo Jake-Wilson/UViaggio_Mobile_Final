@@ -3,7 +3,10 @@ package edu.virginia.cs.uviaggio;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +22,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Underline text
+        TextView textView = (TextView) findViewById(R.id.textView2);
+        SpannableString content = new SpannableString(textView.getText());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        textView.setText(content);
 
         mAuth = FirebaseAuth.getInstance();
     }
