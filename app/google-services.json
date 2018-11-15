@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1012681789784",
+    "firebase_url": "https://wilsonthiringer-project-final.firebaseio.com",
+    "project_id": "wilsonthiringer-project-final",
+    "storage_bucket": "wilsonthiringer-project-final.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012681789784:android:8c5928676f97373f",
+        "android_client_info": {
+          "package_name": "edu.virginia.cs.uviaggio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012681789784-p8k2m1ejp8dlloreaca9eebesge48c1r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.virginia.cs.uviaggio",
+            "certificate_hash": "0ded4ce81641641f7755f988f28002c619f026a9"
+          }
+        },
+        {
+          "client_id": "1012681789784-hvora3q6nq4jmiar44a1nnhlgpr6442r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo2JDOOwoHYDRylq43Kx6Wfb-kVH3MSxQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012681789784-hvora3q6nq4jmiar44a1nnhlgpr6442r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
