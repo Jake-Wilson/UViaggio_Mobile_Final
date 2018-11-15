@@ -1,11 +1,14 @@
 package edu.virginia.cs.uviaggio;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
+    private EditText emailInput;
+    private EditText passwordInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +29,18 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //Underline text
-        TextView textView = (TextView) findViewById(R.id.textView2);
-        SpannableString content = new SpannableString(textView.getText());
+        TextView createAccountTextView = (TextView) findViewById(R.id.createAccountText);
+        SpannableString content = new SpannableString(createAccountTextView.getText());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        textView.setText(content);
+        createAccountTextView.setText(content);
+
+        //Define views
+        emailInput = findViewById(R.id.emailInput);
+        passwordInput = findViewById(R.id.passwordInput);
+
+        //Attach onclick listeners
+        findViewById(R.id.loginButton).setOnClickListener(this);
+        findViewById(R.id.createAccountText).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -44,31 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void createAccount(String email, String password){
-        //Check for validation of form!
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user); -- Update UI here
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
-                            //Update UI
-                        }
-                    }
-
-                });
-            }
-
     private void signin(String email, String password){
-        //Check for validation of form!
+        //TODO: Check for validation of form
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -77,10 +67,11 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
+                            Toast.makeText(LoginActivity.this, "Success! Signed in",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
                             // If sign in fails, display a message to the user.
-
+                            Log.d("Logging in?", "Was Unsuccessful");
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
@@ -89,5 +80,18 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void onClick(View v){
+        int from = v.getId();
+        if(from == R.id.loginButton){
+            Log.d("Logging in?", "Shit");
+            signin(emailInput.getText().toString(), passwordInput.getText().toString());
+        }else if(from == R.id.createAccountText){
+            //Go to CreateAccountActivity
+            Intent intent = new Intent(this, CreateAccountActivity.class);
+            startActivity(intent);
+        }
     }
 }
