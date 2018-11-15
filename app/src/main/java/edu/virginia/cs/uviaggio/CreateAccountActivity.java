@@ -39,7 +39,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     private void createAccount(String email, String password){
         //Check for validation of form!
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
