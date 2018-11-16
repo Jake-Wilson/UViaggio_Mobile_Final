@@ -65,16 +65,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Success! Signed in",
                                     Toast.LENGTH_SHORT).show();
+
+                            //Send to class list screen
+                            Intent intent = new Intent(LoginActivity.this, ClassCardViewActivity.class);
+                            //TODO: Load intent with any necessary info about user (do i need to do this?)
+                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.d("Logging in?", "Was Unsuccessful");
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+                            //TODO: Update UI with login not accepted message
                         }
 
 

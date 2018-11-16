@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateAccountActivity" />
+
+        <activity android:name=".ClassCardViewActivity" />
+        <activity android:name=".ClassCardViewAdapter"></activity>
         <activity android:name=".GpsActivity"></activity>
         <activity android:name=".AddClassActivity"></activity>
     </application>
