@@ -34,6 +34,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         //Attach onClick listeners
         findViewById(R.id.createButton).setOnClickListener(this);
+        findViewById(R.id.mapButton).setOnClickListener(this);
 
     }
 
@@ -68,6 +69,10 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             //TODO: Pre-populate signin credentials for just-created account
             createAccount(emailInput.getText().toString(), passwordInput.getText().toString());
             Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+        if(from == R.id.mapButton) {
+            Intent intent = new Intent(this, GpsActivity.class);
             startActivity(intent);
         }
     }
