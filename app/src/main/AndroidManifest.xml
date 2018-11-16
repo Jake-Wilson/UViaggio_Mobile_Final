@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateAccountActivity" />
-        <activity android:name=".ClassCardViewActivity"></activity>
+        <activity android:name=".ClassCardViewActivity" />
+        <activity android:name=".ClassCardViewAdapter"></activity>
     </application>
 
 </manifest>
