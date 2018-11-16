@@ -32,7 +32,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
     }
 
     public void toAddClass(){
-        Intent addIntent = new Intent(this, AddClassActivity.class);
+        Intent addIntent = new Intent(ClassCardViewActivity.this, AddClassActivity.class);
         startActivityForResult(addIntent,0);
     }
 
@@ -48,6 +48,9 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         //addClass code
+        Log.d("onActivity result hit", "OK");
+        Log.d("requestCode is: ", String.valueOf(requestCode));
+        Log.d("resultCode is: ", String.valueOf(resultCode));
         if(requestCode == 0){
             if(resultCode == RESULT_OK){
                 UserClass c = new UserClass(
@@ -61,6 +64,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
                         data.getStringExtra("lat"),
                         data.getStringExtra("lon"));
                 classList.add(c);
+                Log.d("result addClassActivity", "OK");
                 //TODO: Sort here or sort once when starting main activity??
                 rvClassList.getAdapter().notifyDataSetChanged();
             }

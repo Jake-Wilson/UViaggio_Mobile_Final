@@ -53,16 +53,18 @@ public class AddClassActivity extends AppCompatActivity {
                 try {
                     JSONObject ret = response.getJSONObject(0);
                     Intent newClass = new Intent();
-                    newClass.putExtra("name", ret.get("name").toString());
+                    newClass.putExtra("name", ret.get("courseName").toString());
                     newClass.putExtra("instructor", ret.get("instructor").toString());
                     newClass.putExtra("deptID", ret.get("deptID").toString());
-                    newClass.putExtra("number", ret.get("number").toString());
+                    newClass.putExtra("number", ret.get("courseNum").toString());
                     newClass.putExtra("section", ret.get("section").toString());
                     newClass.putExtra("meetingTime", ret.get("meetingTime").toString());
                     newClass.putExtra("location", ret.get("location").toString());
                     newClass.putExtra("lat", ret.get("lat").toString());
                     newClass.putExtra("lon", ret.get("lon").toString());
                     setResult(RESULT_OK, newClass);
+                    finish();
+                    Log.d("packing up", "OK");
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
@@ -74,8 +76,6 @@ public class AddClassActivity extends AppCompatActivity {
             }
         });
         queue.add(req);
-
-        finish();
     }
 
 }
