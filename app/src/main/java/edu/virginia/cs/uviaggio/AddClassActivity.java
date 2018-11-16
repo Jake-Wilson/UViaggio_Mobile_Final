@@ -1,5 +1,6 @@
 package edu.virginia.cs.uviaggio;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,29 +28,13 @@ public class AddClassActivity extends AppCompatActivity {
     public static final String BASE_URL = "http://stardock.cs.virginia.edu/louslist/Courses/view/";
 
     EditText courseEditText;
-    TextView courseNameTextView;
-    TextView instructorTextView;
-    TextView locationTextView;
-    TextView latitudeTextView;
-    TextView longitudeTextView;
-    TextView courseNumberTextView;
-    TextView meetingTextView;
-    TextView sectionTextView;
-    TextView departmentIDTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
         courseEditText = (EditText) findViewById(R.id.courseEditText);
-        courseNameTextView = (TextView) findViewById(R.id.courseNameTextView);
-        instructorTextView = (TextView) findViewById(R.id.instructorTextView);
-        locationTextView = (TextView) findViewById(R.id.locationTextView);
-        latitudeTextView = (TextView) findViewById(R.id.latitudeTextView);
-        longitudeTextView = (TextView) findViewById(R.id.longitudeTextView);
-        courseNumberTextView = (TextView) findViewById(R.id.courseNumberTextView);
-        meetingTextView = (TextView) findViewById(R.id.meetingTextView);
-        sectionTextView = (TextView) findViewById(R.id.sectionTextView);
-        departmentIDTextView = (TextView) findViewById(R.id.departmentIDTextView);
+
     }
 
     public void downloadData(View view) {
@@ -67,27 +52,20 @@ public class AddClassActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 try {
                     JSONObject ret = response.getJSONObject(0);
-                    courseNameTextView.setText("Course Name: " + ret.get("courseName").toString());
-                    instructorTextView.setText("Instructor: " + ret.get("instructor").toString());
-                    locationTextView.setText("Location: " + ret.get("location").toString());
-                    latitudeTextView.setText("Latitude: " + ret.get("lat").toString());
-                    longitudeTextView.setText("Longitude: " + ret.get("lon").toString());
-                    departmentIDTextView.setText("Department ID: " + ret.get("deptID").toString());
-                    courseNumberTextView.setText("Course Number: " + ret.get("courseNum").toString());
-                    sectionTextView.setText("Section Number: " + ret.get("section").toString());
-                    meetingTextView.setText("Meeting Times: " + ret.get("meetingTime").toString());
+                    Intent newClass = new Intent();
+                    newClass.putExtra("name", ret.get("name").toString());
+                    newClass.putExtra("instructor", ret.get("instructor").toString());
+                    newClass.putExtra("deptID", ret.get("deptID").toString());
+                    newClass.putExtra("number", ret.get("number").toString());
+                    newClass.putExtra("section", ret.get("section").toString());
+                    newClass.putExtra("meetingTime", ret.get("meetingTime").toString());
+                    newClass.putExtra("location", ret.get("location").toString());
+                    newClass.putExtra("lat", ret.get("lat").toString());
+                    newClass.putExtra("lon", ret.get("lon").toString());
+                    setResult(RESULT_OK, newClass);
+                    finish();
                 }catch(JSONException e){
-                    courseNameTextView.setText("Course Name: INVALID REQUEST");
-                    instructorTextView.setText("Instructor: INVALID REQUEST");
-                    locationTextView.setText("Location: INVALID REQUEST");
-                    latitudeTextView.setText("Latitude: INVALID REQUEST");
-                    longitudeTextView.setText("Longitude: INVALID REQUEST");
-                    departmentIDTextView.setText("Department ID: INVALID REQUEST");
-                    courseNumberTextView.setText("Course Number: INVALID REQUEST");
-                    sectionTextView.setText("Section Number: INVALID REQUEST");
-                    meetingTextView.setText("Meeting Times: INVALID REQUEST");
                     e.printStackTrace();
-
                 }
             }
         }, new Response.ErrorListener() {
@@ -98,4 +76,5 @@ public class AddClassActivity extends AppCompatActivity {
         });
         queue.add(req);
     }
+
 }

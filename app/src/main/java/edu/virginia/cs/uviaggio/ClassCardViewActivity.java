@@ -7,10 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class ClassCardViewActivity extends AppCompatActivity {
+public class ClassCardViewActivity extends AppCompatActivity implements View.OnClickListener{
     public static ArrayList<UserClass> classList;
     public RecyclerView rvClassList;
 
@@ -25,13 +26,15 @@ public class ClassCardViewActivity extends AppCompatActivity {
         ClassCardViewAdapter adapter = new ClassCardViewAdapter(this, classList, this);
         rvClassList.setAdapter(adapter);
         rvClassList.setLayoutManager(new LinearLayoutManager(this));
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(this);
 
     }
 
-//    public void addClass(View view){
-//        Intent addIntent = new Intent(this, AddClassActivity.class);
-//        startActivityForResult(addIntent,0);
-//    }
+    public void toAddClass(){
+        Intent addIntent = new Intent(this, AddClassActivity.class);
+        startActivityForResult(addIntent,0);
+    }
 
 //    public void editClass(View view){
 //        Intent editIntent = new Intent(this, EditItemActivity.class);
@@ -59,7 +62,7 @@ public class ClassCardViewActivity extends AppCompatActivity {
                         data.getStringExtra("lon"));
                 classList.add(c);
                 //TODO: Sort here or sort once when starting main activity??
-
+                rvClassList.getAdapter().notifyDataSetChanged();
             }
         }
 
@@ -86,5 +89,10 @@ public class ClassCardViewActivity extends AppCompatActivity {
         }
     }
 
-
+    public void onClick(View v){
+        int from = v.getId();
+        if(from == R.id.fab){
+            toAddClass();
+        }
+    }
 }
