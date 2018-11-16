@@ -1,8 +1,10 @@
 package edu.virginia.cs.uviaggio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +20,14 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView classListText, classListText2, classListText3;
+        public CardView classListItem;
+
         public ViewHolder(View classView){
             super(classView);
             classListText = classView.findViewById(R.id.text1);
             classListText2 = classView.findViewById(R.id.text2);
             classListText3 = classView.findViewById(R.id.text3);
+            classListItem = classView.findViewById(R.id.card_view);
         }
     }
 
@@ -49,13 +54,13 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         UserClass classItem = classList.get(position);
         TextView textView = viewHolder.classListText;
         textView.setText(classItem.getName());
-        textView.setTag(position);
-//        textView.setOnClickListener(new View.OnClickListener() {
+//        viewHolder.classListItem.setOnClickListener(new View.OnClickListener(){
 //            @Override
 //            public void onClick(View v) {
-//                if(mContext instanceof ClassCardViewActivity){
-//                    ((ClassCardViewActivity)mContext).editClass(v);
-//                }
+//                Intent intent = new Intent(mContext, GpsActivity.class);
+//                intent.putExtra("lat", classItem.getLat());
+//                intent.putExtra("lon", classItem.getLon());
+//                mContext.startActivity(intent);
 //            }
 //        });
         TextView textView2 = viewHolder.classListText2;
@@ -69,5 +74,4 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
     public int getItemCount() {
         return classList.size();
     }
-
 }
