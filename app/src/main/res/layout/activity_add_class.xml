@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_class"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddClassActivity">
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="CS 1111"
+        android:ems="10"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/courseEditText"
+        android:textAlignment="center" />
+
+    <Button
+        android:text="Download Data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/courseEditText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/callWebServiceButton"
+        android:onClick="downloadData"/>
+
+    <TextView
+        android:text="Course Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/callWebServiceButton"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/courseNameTextView" />
+
+    <TextView
+        android:text="Instructor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/instructorTextView"
+        android:layout_below="@+id/courseNameTextView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationTextView"
+        android:layout_below="@+id/instructorTextView"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
