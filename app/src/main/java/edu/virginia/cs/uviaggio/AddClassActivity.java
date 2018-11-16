@@ -63,7 +63,6 @@ public class AddClassActivity extends AppCompatActivity {
                     newClass.putExtra("lat", ret.get("lat").toString());
                     newClass.putExtra("lon", ret.get("lon").toString());
                     setResult(RESULT_OK, newClass);
-                    finish();
                 }catch(JSONException e){
                     e.printStackTrace();
                 }
@@ -75,6 +74,8 @@ public class AddClassActivity extends AppCompatActivity {
             }
         });
         queue.add(req);
+
+        finish();
     }
 
 }
