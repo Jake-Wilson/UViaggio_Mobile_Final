@@ -16,17 +16,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
     private GoogleMap mMap;
     private Double lat, lon;
+    private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
 
-//        Intent in = this.getIntent();
-//        Log.d("Received name : ", in.getStringExtra("name"));
-//        Log.d("Received lat : ", in.getStringExtra("lat"));
-//        Log.d("Received lon : ", (in.getStringExtra("lon")==null)?"Why is lon null":in.getStringExtra("lon"));
-//        lat = Double.valueOf(in.getStringExtra("lat"));
-//        lon = Double.valueOf(in.getStringExtra("lon"));
+        Intent in = this.getIntent();
+
+        lat = Double.valueOf(in.getStringExtra("lat"));
+        lon = Double.valueOf(in.getStringExtra("lon"));
+        name = in.getStringExtra("name");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -34,8 +35,9 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap googleMap){
         mMap = googleMap;
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng notSydney = new LatLng(lat, lon);
+        mMap.addMarker(new MarkerOptions().position(notSydney).title(name)).showInfoWindow();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(notSydney,17));
+
     }
 }

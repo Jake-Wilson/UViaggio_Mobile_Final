@@ -55,13 +55,13 @@ public class UserClass implements Parcelable {
         this.meetingTime = meetingTime;
         this.location = location;
         this.lat = lat;
-        this.lat = lon;
+        this.lon = lon;
     }
 
     public static ArrayList<UserClass> createInitialClassList(){
         ArrayList<UserClass> classList = new ArrayList<>();
-        classList.add(new UserClass("Mobile - Test", "Mark Sherriff", "CS", "4720", "100", "MWF 1:00PM - 1:50PM", "Olsson Hall 005", "30", "122"));
-        classList.add(new UserClass("PDR - Test", "Mark Floryan", "CS", "2150", "100", "MWF 2:00PM - 2:50PM", "Rice 130", "60", "200"));
+        classList.add(new UserClass("Mobile - Test", "Mark Sherriff", "CS", "4720", "100", "MWF 1:00PM - 1:50PM", "Olsson Hall 005", "38.031639", "-78.510811"));
+        classList.add(new UserClass("PDR - Test", "Mark Floryan", "CS", "2150", "100", "MWF 2:00PM - 2:50PM", "Rice 130", "38.034276", "-78.513005"));
         return classList;
     }
 

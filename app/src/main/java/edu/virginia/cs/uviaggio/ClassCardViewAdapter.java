@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,20 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View classListView = inflater.inflate(R.layout.user_class, parent, false);
-        ViewHolder viewHolder = new ViewHolder(classListView);
+        final ViewHolder viewHolder = new ViewHolder(classListView);
+        viewHolder.classListItem.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, GpsActivity.class);
+                Log.d("item in question", classList.get(viewHolder.getAdapterPosition()).getName());
+                Log.d("lat in question", classList.get(viewHolder.getAdapterPosition()).getLat());
+                Log.d("ion in question", classList.get(viewHolder.getAdapterPosition()).getLon());
+                intent.putExtra("name", classList.get(viewHolder.getAdapterPosition()).getName());
+                intent.putExtra("lat", classList.get(viewHolder.getAdapterPosition()).getLat());
+                intent.putExtra("lon", classList.get(viewHolder.getAdapterPosition()).getLon());
+                mContext.startActivity(intent);
+            }
+        });
         return viewHolder;
     }
 
@@ -54,18 +68,8 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         UserClass classItem = classList.get(position);
         TextView textView = viewHolder.classListText;
         textView.setText(classItem.getName());
-//        viewHolder.classListItem.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(mContext, GpsActivity.class);
-//                intent.putExtra("lat", classItem.getLat());
-//                intent.putExtra("lon", classItem.getLon());
-//                mContext.startActivity(intent);
-//            }
-//        });
         TextView textView2 = viewHolder.classListText2;
         textView2.setText(classItem.getInstructor());
-
         TextView textView3 = viewHolder.classListText3;
         textView3.setText(classItem.getMeetingTime());
     }
