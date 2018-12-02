@@ -2,6 +2,8 @@ package edu.virginia.cs.uviaggio;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import java.util.ArrayList;
 

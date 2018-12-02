@@ -1,6 +1,7 @@
 package edu.virginia.cs.uviaggio;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class ClassCardViewActivity extends AppCompatActivity implements View.OnClickListener{
+public class ClassCardViewActivity extends FragmentActivity implements View.OnClickListener{
     public static ArrayList<UserClass> classList;
     public RecyclerView rvClassList;
 
