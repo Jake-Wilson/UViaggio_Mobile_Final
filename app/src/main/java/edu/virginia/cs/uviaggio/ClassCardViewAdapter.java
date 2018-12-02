@@ -2,6 +2,7 @@ package edu.virginia.cs.uviaggio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdapter.ViewHolder> {
     private Context mContext;
@@ -23,9 +29,10 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
     private int expandedPosition = -1;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView classListText, classListText2, classListText3;
+        public TextView classListText, classListText2, classListText3, statsText;
         public CardView classListItem;
         public LinearLayout classListExpand;
+        public Button gpsButton;
 
         public ViewHolder(View classView){
             super(classView);
@@ -34,6 +41,8 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
             classListText3 = classView.findViewById(R.id.text3);
             classListItem = classView.findViewById(R.id.card_view);
             classListExpand = classView.findViewById(R.id.llExpandArea);
+            statsText = classView.findViewById(R.id.stats);
+            gpsButton = classView.findViewById(R.id.gpsStart);
         }
     }
 
@@ -70,6 +79,7 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
                     int prev = expandedPosition;
                     notifyItemChanged(prev);
                 }
+
                 expandedPosition = holder.getLayoutPosition();
                 notifyItemChanged(expandedPosition);
             }
@@ -83,13 +93,26 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
 
         UserClass classItem = classList.get(position);
         TextView textView = viewHolder.classListText;
+        textView.setTag(position);
         textView.setText(classItem.getName());
         TextView textView2 = viewHolder.classListText2;
+        textView2.setTag(position);
         textView2.setText(classItem.getInstructor());
         TextView textView3 = viewHolder.classListText3;
         textView3.setText(classItem.getMeetingTime());
+        textView3.setTag(position);
         if (position == expandedPosition){
             viewHolder.classListExpand.setVisibility(View.VISIBLE);
+            Button button = viewHolder.gpsButton;
+            button.setTag(position);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){
+                    if(mContext instanceof ClassCardViewActivity){
+                        ((ClassCardViewActivity)mContext).launchGPS(v);
+                    }
+                }
+            });
         } else{
             viewHolder.classListExpand.setVisibility(View.GONE);
         }

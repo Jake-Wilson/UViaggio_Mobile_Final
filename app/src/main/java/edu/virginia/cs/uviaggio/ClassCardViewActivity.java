@@ -37,6 +37,15 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
         Intent addIntent = new Intent(ClassCardViewActivity.this, AddClassActivity.class);
         startActivityForResult(addIntent,0);
     }
+    public void launchGPS(View view){
+        Intent gpsIntent = new Intent(ClassCardViewActivity.this, GpsActivity.class);
+        UserClass Class = classList.get((int)view.getTag());
+        gpsIntent.putExtra("lat", Class.getLat());
+        gpsIntent.putExtra("lon",Class.getLon());
+        startActivity(gpsIntent);
+    }
+
+
 
 //    public void editClass(View view){
 //        Intent editIntent = new Intent(this, EditItemActivity.class);
