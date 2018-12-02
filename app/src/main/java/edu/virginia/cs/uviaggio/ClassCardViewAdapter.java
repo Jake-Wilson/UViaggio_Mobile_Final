@@ -63,7 +63,7 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
 //                intent.putExtra("lat", classList.get(viewHolder.getAdapterPosition()).getLat());
 //                intent.putExtra("lon", classList.get(viewHolder.getAdapterPosition()).getLon());
 //                mContext.startActivity(intent);
-                CardView view = (CardView) ;
+                ViewHolder holder = (ViewHolder) v.getTag();
                 Integer spot = holder.getLayoutPosition();
                 UserClass position = classList.get(spot);
                 if (expandedPosition >= 0){
@@ -74,6 +74,7 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
                 notifyItemChanged(expandedPosition);
             }
         });
+        viewHolder.itemView.setTag(viewHolder);
         return viewHolder;
     }
 
