@@ -10,11 +10,19 @@ import android.util.Log;
 import android.view.View;
 import android.support.design.widget.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class ClassCardViewActivity extends FragmentActivity implements View.OnClickListener{
     public static ArrayList<UserClass> classList;
     public RecyclerView rvClassList;
+    static final int ADD_CLASS = 0;
+    static final int EDIT_CLASS = 1;
+    static final int GPS_RESULT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +43,25 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
 
     public void toAddClass(){
         Intent addIntent = new Intent(ClassCardViewActivity.this, AddClassActivity.class);
-        startActivityForResult(addIntent,0);
+        startActivityForResult(addIntent,ADD_CLASS);
     }
     public void launchGPS(View view){
         Intent gpsIntent = new Intent(ClassCardViewActivity.this, GpsActivity.class);
         UserClass Class = classList.get((int)view.getTag());
+        SimpleDateFormat format = new SimpleDateFormat("hh:mma");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        try {
+            Log.d("Meet time string: ", Class.getMeetingTime().split(" ")[1]);
+            Date startTime = format.parse(Class.getMeetingTime().split(" ")[1]);
+            Log.d("Meet time parsed:", String.valueOf(startTime));
+            Log.d("Meet time millis:", String.valueOf(startTime.getTime()));
+            gpsIntent.putExtra("start", startTime.getTime());
+        }catch (Exception e){
+            Log.e("Error!", e.getStackTrace().toString());
+        }
         gpsIntent.putExtra("lat", Class.getLat());
         gpsIntent.putExtra("lon",Class.getLon());
-        startActivity(gpsIntent);
+        startActivityForResult(gpsIntent, GPS_RESULT);
     }
 
 
@@ -59,7 +78,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         //addClass code
-        if(requestCode == 0){
+        if(requestCode == ADD_CLASS){
             if(resultCode == RESULT_OK){
                 UserClass c = new UserClass(
                         data.getStringExtra("name"),
@@ -79,7 +98,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
 
         //editClass code
         //TODO: Instead of removing/adding new, can we find a way to just edit existing?
-        if(requestCode == 1){
+        if(requestCode == EDIT_CLASS){
             if(resultCode == RESULT_OK){
                 //Swap Items
                 UserClass c = new UserClass(
@@ -94,6 +113,15 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                         data.getStringExtra("lon"));
                 classList.add(c);
                 classList.remove(data.getIntExtra("Position", 1000000000));
+                //TODO:Sort here or somewhere when main activity loads?
+                rvClassList.getAdapter().notifyItemChanged(data.getIntExtra("Position", 1000000000));
+            }
+        }
+
+        if(requestCode == GPS_RESULT){
+            if(resultCode == RESULT_OK){
+                //TODO: Store associated (classStartTime(ms) - recordedTime) in class's startAt variable
+
                 //TODO:Sort here or somewhere when main activity loads?
                 rvClassList.getAdapter().notifyItemChanged(data.getIntExtra("Position", 1000000000));
             }
