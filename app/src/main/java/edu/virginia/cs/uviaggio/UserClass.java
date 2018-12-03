@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import java.util.ArrayList;
 
 public class UserClass implements Parcelable {
-    private String name, instructor, deptID, number, section, meetingTime, location, lat, lon;
+    private String name, instructor, deptID, number, section, meetingTime, location, lat, lon, leaveTime;
 
     @Override
     public int describeContents(){
@@ -26,12 +26,14 @@ public class UserClass implements Parcelable {
         dest.writeString(location);
         dest.writeString(lat);
         dest.writeString(lon);
+        dest.writeString(leaveTime);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator<UserClass>(){
         @Override
         public UserClass createFromParcel(Parcel in) {
             return new UserClass(in.readString(),
+                    in.readString(),
                     in.readString(),
                     in.readString(),
                     in.readString(),
@@ -48,7 +50,7 @@ public class UserClass implements Parcelable {
         }
     };
 
-    public UserClass(String name, String instructor, String deptID, String number, String section, String meetingTime, String location, String lat, String lon){
+    public UserClass(String name, String instructor, String deptID, String number, String section, String meetingTime, String location, String lat, String lon, String leaveTime){
         this.name = name;
         this.instructor = instructor;
         this.deptID = deptID;
@@ -58,12 +60,13 @@ public class UserClass implements Parcelable {
         this.location = location;
         this.lat = lat;
         this.lon = lon;
+        this.leaveTime = leaveTime;
     }
 
     public static ArrayList<UserClass> createInitialClassList(){
         ArrayList<UserClass> classList = new ArrayList<>();
-        classList.add(new UserClass("Mobile - Test", "Mark Sherriff", "CS", "4720", "100", "MWF 1:00PM - 1:50PM", "Olsson Hall 005", "38.031639", "-78.510811"));
-        classList.add(new UserClass("PDR - Test", "Mark Floryan", "CS", "2150", "100", "MWF 2:00PM - 2:50PM", "Rice 130", "38.034276", "-78.513005"));
+        classList.add(new UserClass("Mobile - Test", "Mark Sherriff", "CS", "4720", "100", "MWF 1:00PM - 1:50PM", "Olsson Hall 005", "38.031639", "-78.510811", "Recommended leave time: "));
+        classList.add(new UserClass("PDR - Test", "Mark Floryan", "CS", "2150", "100", "MWF 2:00PM - 2:50PM", "Rice 130", "38.034276", "-78.513005", "Recommended leave time: "));
         return classList;
     }
 
@@ -102,4 +105,6 @@ public class UserClass implements Parcelable {
     public String getLon(){
         return lon;
     }
+
+    public String getLeaveTime() { return leaveTime; }
 }
