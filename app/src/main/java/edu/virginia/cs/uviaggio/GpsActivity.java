@@ -27,6 +27,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.Timer;
 
 public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
@@ -37,6 +41,7 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
     LocationListener locationListenerGPS;
     Double currentLat;
     Double currentLon;
+    long classStart;
     private static final int GPSPermission = 1;
     public TextView finishText;
 
@@ -49,6 +54,7 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
 
         lat = Double.valueOf(in.getStringExtra("lat"));
         lon = Double.valueOf(in.getStringExtra("lon"));
+        classStart = in.getLongExtra("start", 0);
         name = in.getStringExtra("name");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -120,15 +126,26 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
             }
         };
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
-            float[] dist = {0};
-            Location.distanceBetween(currentLat, currentLon, lat, lon, dist);
+                == PackageManager.PERMISSION_GRANTED ){
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListenerGPS);
+            float[] dist = {0};
+            if(currentLat != null && currentLon != null)
+                Location.distanceBetween(currentLat, currentLon, lat, lon, dist);
+            Log.d("Dist btwn: ", String.valueOf(dist[0]));
             if(dist[0] <= 27){
                 endTime = System.currentTimeMillis();
                 finishText.setText(endTime.toString());
                 finishText.setVisibility(View.VISIBLE);
+                Log.d("Done tracking location", "nowwwww");
                 locationManager.removeUpdates(locationListenerGPS);
+                Intent routeData = new Intent();
+                long totalTime = (classStart) - (endTime - startTime);
+                SimpleDateFormat format = new SimpleDateFormat("hh:mma");
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                Log.d("leaveTime is: ", format.format(new Date(totalTime)));
+                routeData.putExtra("leaveTime", format.format(new Date((long)totalTime)));
+                setResult(RESULT_OK, routeData);
+                finish();
             }
         }
 
