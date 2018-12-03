@@ -8,20 +8,20 @@
     android:layout_width="550dp"
     android:layout_height="100dp"
     android:layout_gravity="center_horizontal"
-    android:layout_marginTop="20dp"
-    android:layout_marginLeft="20dp"
     android:layout_marginBottom="20dp"
-    card_view:cardCornerRadius="4dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="20dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    card_view:cardCornerRadius="4dp">
 
     <TextView
         android:id="@+id/text1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:maxLines="2"
         android:paddingStart="20px"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:text="Example Text" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:maxLines="2"
         android:paddingStart="350px"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:text="Example Text2" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:maxLines="2"
         android:paddingStart="700px"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:text="Example Text3" />
 
     <LinearLayout

@@ -121,8 +121,10 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
         };
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED){
+            float[] dist = {0};
+            Location.distanceBetween(currentLat, currentLon, lat, lon, dist);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListenerGPS);
-            if(currentLat != null && (lat-currentLat)+(lon-currentLon) <= 1 ){
+            if(dist[0] <= 27){
                 endTime = System.currentTimeMillis();
                 finishText.setText(endTime.toString());
                 finishText.setVisibility(View.VISIBLE);
