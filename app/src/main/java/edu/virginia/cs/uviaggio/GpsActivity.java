@@ -43,7 +43,6 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
     Double currentLon;
     long classStart;
     private static final int GPSPermission = 1;
-    public TextView finishText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,14 +59,12 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        finishText = findViewById(R.id.finishTime);
         Button startTrack = findViewById(R.id.track);
         startTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button b = (Button) v;
-                b.setText("Stop Tracking");
+                b.setText("Cancel Tracking");
                 startTracking(v);
             }
         });
@@ -90,7 +87,6 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
                 Button b = (Button) v;
                 b.setText("Start Tracking");
                 //ToDo: stop tracking
-                finishText.setText("Tracking Stopped");
                 locationManager.removeUpdates(locationListenerGPS);
                 Log.d("Updates stopped", "yes");
             }
