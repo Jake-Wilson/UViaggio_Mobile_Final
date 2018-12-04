@@ -27,19 +27,21 @@ import java.net.URLEncoder;
 public class AddClassActivity extends AppCompatActivity {
     public static final String BASE_URL = "http://stardock.cs.virginia.edu/louslist/Courses/view/";
 
-    EditText courseEditText;
+    EditText courseEditText, sectionEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
         courseEditText = (EditText) findViewById(R.id.courseEditText);
-
+        sectionEditText = (EditText) findViewById(R.id.sectionEditText);
     }
 
     public void downloadData(View view) {
         EditText userInput = (EditText) findViewById(R.id.courseEditText);
+        EditText sectionInput = (EditText) findViewById(R.id.sectionEditText);
         String inputText = userInput.getText().toString();
+        final String sectionText = sectionInput.getText().toString();
         String[] textArray = inputText.split(" ");
 
         String requestUrl = "http://stardock.cs.virginia.edu/louslist/Courses/view/" + textArray[0] + "/" + textArray[1] + "?json";
@@ -50,27 +52,33 @@ public class AddClassActivity extends AppCompatActivity {
         JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, requestUrl, (JSONArray) null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                try {
-                    JSONObject ret = response.getJSONObject(0);
-                    Intent newClass = new Intent();
-                    newClass.putExtra("name", ret.get("courseName").toString());
-                    newClass.putExtra("instructor", ret.get("instructor").toString());
-                    newClass.putExtra("deptID", ret.get("deptID").toString());
-                    newClass.putExtra("number", ret.get("courseNum").toString());
-                    newClass.putExtra("section", ret.get("section").toString());
-                    newClass.putExtra("meetingTime", ret.get("meetingTime").toString());
-                    newClass.putExtra("location", ret.get("location").toString());
-                    newClass.putExtra("lat", ret.get("lat").toString());
-                    newClass.putExtra("lon", ret.get("lon").toString());
-                    Log.d("Parsed lat:", ret.get("lat").toString());
-                    Log.d("Parsed lon: ", ret.get("lon").toString());
-                    setResult(RESULT_OK, newClass);
-                    finish();
-                    Log.d("packing up", "OK");
-                }catch(JSONException e){
-                    e.printStackTrace();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject ret = response.getJSONObject(i);
+                        if (ret.get("section").toString().equals(sectionText)) {
+                            Intent newClass = new Intent();
+                            newClass.putExtra("name", ret.get("courseName").toString());
+                            newClass.putExtra("instructor", ret.get("instructor").toString());
+                            newClass.putExtra("deptID", ret.get("deptID").toString());
+                            newClass.putExtra("number", ret.get("courseNum").toString());
+                            newClass.putExtra("section", ret.get("section").toString());
+                            newClass.putExtra("meetingTime", ret.get("meetingTime").toString());
+                            newClass.putExtra("location", ret.get("location").toString());
+                            newClass.putExtra("lat", ret.get("lat").toString());
+                            newClass.putExtra("lon", ret.get("lon").toString());
+                            Log.d("Parsed lat:", ret.get("lat").toString());
+                            Log.d("Parsed lon: ", ret.get("lon").toString());
+                            setResult(RESULT_OK, newClass);
+                            finish();
+                            Log.d("packing up", "OK");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

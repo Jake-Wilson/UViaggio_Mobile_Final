@@ -186,6 +186,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
             newRowID = db.insert("Classes", null, values);
         }
     }
+    db.close();
     }
     public void loadFromDatabase() {
 
