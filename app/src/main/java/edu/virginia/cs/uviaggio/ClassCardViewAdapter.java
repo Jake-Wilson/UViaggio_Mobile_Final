@@ -2,6 +2,7 @@ package edu.virginia.cs.uviaggio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +57,7 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
     }
 
     @Override
-    public ClassCardViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public ClassCardViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType){
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         final View classListView = inflater.inflate(R.layout.user_class, parent, false);
@@ -116,6 +117,24 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         } else{
             viewHolder.classListExpand.setVisibility(View.GONE);
         }
+        // long click or hold to delete item from classlist and db
+        viewHolder.classListItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ViewHolder holder = (ViewHolder) v.getTag();
+                Integer spot = holder.getLayoutPosition();
+                DatabaseHelper mDBHelper = new DatabaseHelper(mContext);
+                SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                String removeQuery = "DELETE FROM Classes WHERE name = \"" + classList.get(spot).getName() + "\"";
+                db.execSQL(removeQuery);
+                Log.d("removed item from db", removeQuery);
+                classList.remove(spot);
+                notifyItemRemoved(spot);
+                notifyItemRangeRemoved(spot,1);
+                //TODO: remove item from recycler view
+                return false;
+            }
+        });
     }
 
     @Override

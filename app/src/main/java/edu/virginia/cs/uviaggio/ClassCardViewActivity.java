@@ -143,8 +143,15 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
             if(resultCode == RESULT_OK){
                 //TODO: Store associated (classStartTime(ms) - recordedTime) in class's startAt variable
                 for(UserClass user : classList){
-                    if(user.getName().equals(data.getStringExtra("name")))
+                    if(user.getName().equals(data.getStringExtra("name"))) {
                         user.setLeaveTime(data.getLongExtra("leaveTime", 999));
+                        DatabaseHelper mDBHelper = new DatabaseHelper(this);
+                        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                        String insertString = "UPDATE classes SET leaveTime = " + data.getLongExtra("leaveTime", 999)+ " WHERE name = \"" + data.getStringExtra("name") +"\"";
+                        db.execSQL(insertString);
+                        Log.d("GPS class update", insertString);
+                        Log.d("item leaveTime",String.valueOf( user.getLeaveTime()));
+                    }
                 }
 
                 //TODO:Sort here or somewhere when main activity loads?

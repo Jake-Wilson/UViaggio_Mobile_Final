@@ -29,6 +29,7 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        app:backgroundTint="@color/colorAccent"/>
     </RelativeLayout>
 </LinearLayout>
