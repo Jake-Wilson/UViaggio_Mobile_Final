@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class ClassCardViewActivity extends FragmentActivity implements View.OnClickListener{
+public class ClassCardViewActivity extends AppCompatActivity implements View.OnClickListener{
     public static ArrayList<UserClass> classList;
     public RecyclerView rvClassList;
     static final int ADD_CLASS = 0;
@@ -30,6 +30,8 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("UViaggio");
+        getSupportActionBar().show();
         classList = UserClass.createInitialClassList();
         loadFromDatabase();
         setContentView(R.layout.activity_class_card_view);
