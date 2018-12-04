@@ -33,7 +33,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Timer;
 
-public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
+public class GpsActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Double lat, lon;
     private String name;
@@ -72,15 +72,17 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
             }
         });
     }
+
     @Override
-    public void onMapReady(GoogleMap googleMap){
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng notSydney = new LatLng(lat, lon);
         mMap.addMarker(new MarkerOptions().position(notSydney).title(name)).showInfoWindow();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(notSydney,17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(notSydney, 17));
 
     }
-    public void startTracking(View view){
+
+    public void startTracking(View view) {
         Button b = (Button) view;
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,15 +92,14 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
                 //ToDo: stop tracking
                 finishText.setText("Tracking Stopped");
                 locationManager.removeUpdates(locationListenerGPS);
-                Log.d("Updates stopped","yes");
+                Log.d("Updates stopped", "yes");
             }
         });
-        Long startTime = System.currentTimeMillis();
-        Long endTime;
+        final long startTime = System.currentTimeMillis();
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},GPSPermission);
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPSPermission);
         }
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListenerGPS = new LocationListener() {
@@ -108,6 +109,26 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
                 currentLon = location.getLongitude();
                 Log.d("Lat in locationChanged", currentLat.toString());
                 Log.d("Lon in LocationChanged", currentLon.toString());
+
+                float[] dist = {0};
+                if (currentLat != null && currentLon != null) {
+                    Location.distanceBetween(currentLat, currentLon, lat, lon, dist);
+                    Log.d("Current lat: ", String.valueOf(currentLat));
+                    Log.d("Current lon: ", String.valueOf(currentLon));
+                    Log.d("Dist btwn: ", String.valueOf(dist[0]));
+                    if (dist[0] <= 27) {
+                        long endTime = System.currentTimeMillis();
+                        Log.d("Done tracking location", "nowwwww");
+                        locationManager.removeUpdates(locationListenerGPS);
+                        Intent routeData = new Intent();
+                        long totalTime = (classStart) - (endTime - startTime);
+                        Log.d("leaveTime is: ", String.valueOf(totalTime));
+                        routeData.putExtra("leaveTime", totalTime);
+                        routeData.putExtra("name", name);
+                        setResult(RESULT_OK, routeData);
+                        finish();
+                    }
+                }
             }
 
             @Override
@@ -125,29 +146,11 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
 
             }
         };
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED ){
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListenerGPS);
-            float[] dist = {0};
-            if(currentLat != null && currentLon != null)
-                Location.distanceBetween(currentLat, currentLon, lat, lon, dist);
-            Log.d("Dist btwn: ", String.valueOf(dist[0]));
-            if(dist[0] <= 27){
-                endTime = System.currentTimeMillis();
-                finishText.setText(endTime.toString());
-                finishText.setVisibility(View.VISIBLE);
-                Log.d("Done tracking location", "nowwwww");
-                locationManager.removeUpdates(locationListenerGPS);
-                Intent routeData = new Intent();
-                long totalTime = (classStart) - (endTime - startTime);
-                Log.d("leaveTime is: ", String.valueOf(totalTime));
-                routeData.putExtra("leaveTime", totalTime);
-                routeData.putExtra("name", name);
-                setResult(RESULT_OK, routeData);
-                finish();
-            }
+
+        if (ContextCompat.checkSelfPermission(GpsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGPS);
+
         }
-
-
     }
 }

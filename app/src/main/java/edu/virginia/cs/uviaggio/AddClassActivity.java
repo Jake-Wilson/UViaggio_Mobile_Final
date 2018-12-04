@@ -66,8 +66,8 @@ public class AddClassActivity extends AppCompatActivity {
                             newClass.putExtra("location", ret.get("location").toString());
                             newClass.putExtra("lat", ret.get("lat").toString());
                             newClass.putExtra("lon", ret.get("lon").toString());
-                            Log.d("Parsed lat:", ret.get("lat").toString());
-                            Log.d("Parsed lon: ", ret.get("lon").toString());
+                            newClass.putExtra("leaveTime", (long)0);
+                            newClass.putExtra("tripsTaken", (long)0);
                             setResult(RESULT_OK, newClass);
                             finish();
                             Log.d("packing up", "OK");

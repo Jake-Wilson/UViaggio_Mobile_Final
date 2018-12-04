@@ -74,8 +74,7 @@ public class UserClass {
     public long getTripsTaken() { return tripsTaken;}
 
     public void setLeaveTime(long leaveTime) {
-        long totalTime = this.leaveTime + leaveTime;
-        Log.d("new totalTime: ", String.valueOf(totalTime));
+        long totalTime = (this.leaveTime * this.tripsTaken) + leaveTime;
         this.tripsTaken++;
         long totalTrips = this.tripsTaken;
         this.leaveTime = totalTime / totalTrips;

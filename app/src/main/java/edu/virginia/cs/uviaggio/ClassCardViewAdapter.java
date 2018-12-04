@@ -18,8 +18,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.OkHttpClient;
 
@@ -29,7 +32,7 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
     private int expandedPosition = -1;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView classListText, classListText2, classListText3, statsText;
+        public TextView classListText, classListText2, classListText3, leaveTime;
         public CardView classListItem;
         public LinearLayout classListExpand;
         public Button gpsButton;
@@ -41,7 +44,7 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
             classListText3 = classView.findViewById(R.id.text3);
             classListItem = classView.findViewById(R.id.card_view);
             classListExpand = classView.findViewById(R.id.llExpandArea);
-            statsText = classView.findViewById(R.id.stats);
+            leaveTime = classView.findViewById(R.id.leaveTime);
             gpsButton = classView.findViewById(R.id.gpsStart);
         }
     }
@@ -64,14 +67,6 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         viewHolder.classListItem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(mContext, GpsActivity.class);
-//                Log.d("item in question", classList.get(viewHolder.getAdapterPosition()).getName());
-//                Log.d("lat in question", classList.get(viewHolder.getAdapterPosition()).getLat());
-//                Log.d("ion in question", classList.get(viewHolder.getAdapterPosition()).getLon());
-//                intent.putExtra("name", classList.get(viewHolder.getAdapterPosition()).getName());
-//                intent.putExtra("lat", classList.get(viewHolder.getAdapterPosition()).getLat());
-//                intent.putExtra("lon", classList.get(viewHolder.getAdapterPosition()).getLon());
-//                mContext.startActivity(intent);
                 ViewHolder holder = (ViewHolder) v.getTag();
                 Integer spot = holder.getLayoutPosition();
                 UserClass position = classList.get(spot);
@@ -103,6 +98,14 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         textView3.setTag(position);
         if (position == expandedPosition){
             viewHolder.classListExpand.setVisibility(View.VISIBLE);
+            if(classItem.getLeaveTime() != 0) {
+                Date timeDate = new Date(classItem.getLeaveTime());
+                SimpleDateFormat f = new SimpleDateFormat("hh:mma");
+                f.setTimeZone(TimeZone.getTimeZone("GMT"));
+                viewHolder.leaveTime.setText(f.format(timeDate));
+            }else{
+                viewHolder.leaveTime.setText("No Data");
+            }
             Button button = viewHolder.gpsButton;
             button.setTag(position);
             button.setOnClickListener(new View.OnClickListener() {

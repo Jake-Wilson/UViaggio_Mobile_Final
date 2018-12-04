@@ -108,6 +108,8 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                         data.getStringExtra("lon"),
                         data.getLongExtra("leaveTime", 999),
                         data.getLongExtra("tripsTaken", 999));
+                Log.d("leaveTime for new", String.valueOf(data.getLongExtra("leaveTime", 999)));
+                Log.d("tripsTaken for new", String.valueOf(data.getLongExtra("tripsTaken", 999)));
                 classList.add(c);
                 //TODO: Sort here or sort once when starting main activity??
                 rvClassList.getAdapter().notifyDataSetChanged();
