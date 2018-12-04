@@ -131,9 +131,9 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
                 String removeQuery = "DELETE FROM Classes WHERE name = \"" + classList.get(spot).getName() + "\"";
                 db.execSQL(removeQuery);
                 Log.d("removed item from db", removeQuery);
-                classList.remove(spot);
+                classList.remove(classList.get(spot));
                 notifyItemRemoved(spot);
-                notifyItemRangeRemoved(spot,1);
+                //notifyItemRangeRemoved(spot,1);
                 //TODO: remove item from recycler view
                 return false;
             }
