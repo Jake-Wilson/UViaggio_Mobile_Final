@@ -149,7 +149,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                         user.setLeaveTime(data.getLongExtra("leaveTime", 999));
                         DatabaseHelper mDBHelper = new DatabaseHelper(this);
                         SQLiteDatabase db = mDBHelper.getWritableDatabase();
-                        String insertString = "UPDATE classes SET leaveTime = " + data.getLongExtra("leaveTime", 999)+ " WHERE name = \"" + data.getStringExtra("name") +"\"";
+                        String insertString = "UPDATE classes SET leaveTime = " + user.getLeaveTime()+ " WHERE name = \"" + data.getStringExtra("name") +"\"";
                         db.execSQL(insertString);
                         Log.d("GPS class update", insertString);
                         Log.d("item leaveTime",String.valueOf( user.getLeaveTime()));
