@@ -1,6 +1,7 @@
 package edu.virginia.cs.uviaggio;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,17 +23,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
     private EditText emailInput;
     private EditText passwordInput;
+    private TextView logoText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
 
         //Underline text
         TextView createAccountTextView = (TextView) findViewById(R.id.createAccountText);
         SpannableString content = new SpannableString(createAccountTextView.getText());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         createAccountTextView.setText(content);
+
+        //Style Logo Text
+        logoText = findViewById(R.id.textView);
+        logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Pacifico-Regular.ttf"));
+        //logoText.setTextSize(72);
 
         //Define views
         emailInput = findViewById(R.id.emailInput);
