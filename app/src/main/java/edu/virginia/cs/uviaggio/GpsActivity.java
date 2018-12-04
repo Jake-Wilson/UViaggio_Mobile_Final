@@ -140,10 +140,9 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback{
                 locationManager.removeUpdates(locationListenerGPS);
                 Intent routeData = new Intent();
                 long totalTime = (classStart) - (endTime - startTime);
-                SimpleDateFormat format = new SimpleDateFormat("hh:mma");
-                format.setTimeZone(TimeZone.getTimeZone("GMT"));
-                Log.d("leaveTime is: ", format.format(new Date(totalTime)));
-                routeData.putExtra("leaveTime", format.format(new Date((long)totalTime)));
+                Log.d("leaveTime is: ", String.valueOf(totalTime));
+                routeData.putExtra("leaveTime", totalTime);
+                routeData.putExtra("name", name);
                 setResult(RESULT_OK, routeData);
                 finish();
             }

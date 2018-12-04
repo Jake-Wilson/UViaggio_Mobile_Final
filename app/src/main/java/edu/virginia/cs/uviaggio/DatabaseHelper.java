@@ -17,7 +17,7 @@ import android.database.sqlite.SQLiteOpenHelper;
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("create table Classes (name varchar(25), instructor varchar(25), deptID varchar(25), number varchar(25), section varchar(25), meetingTime varchar(25), location varchar(25), lat varchar(25), lon varchar(25), leaveTime varchar(50))");
+            db.execSQL("create table Classes (name varchar(25), instructor varchar(25), deptID varchar(25), number varchar(25), section varchar(25), meetingTime varchar(25), location varchar(25), lat varchar(25), lon varchar(25), leaveTime integer, tripsTaken integer)");
         }
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // This database is only a cache for online data, so its upgrade policy is

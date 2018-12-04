@@ -4,53 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import java.util.ArrayList;
 
-public class UserClass implements Parcelable {
-    private String name, instructor, deptID, number, section, meetingTime, location, lat, lon, leaveTime;
+public class UserClass {
+    private String name, instructor, deptID, number, section, meetingTime, location, lat, lon;
+    private long leaveTime, tripsTaken;
 
-    @Override
-    public int describeContents(){
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags){
-        dest.writeString(name);
-        dest.writeString(instructor);
-        dest.writeString(deptID);
-        dest.writeString(number);
-        dest.writeString(section);
-        dest.writeString(meetingTime);
-        dest.writeString(location);
-        dest.writeString(lat);
-        dest.writeString(lon);
-        dest.writeString(leaveTime);
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator<UserClass>(){
-        @Override
-        public UserClass createFromParcel(Parcel in) {
-            return new UserClass(in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString(),
-                    in.readString()
-            );
-        }
-
-        @Override public UserClass[] newArray(int size){
-            return new UserClass[size];
-        }
-    };
-
-    public UserClass(String name, String instructor, String deptID, String number, String section, String meetingTime, String location, String lat, String lon, String leaveTime){
+    public UserClass(String name, String instructor, String deptID, String number, String section, String meetingTime, String location, String lat, String lon, long leaveTime, long tripsTaken){
         this.name = name;
         this.instructor = instructor;
         this.deptID = deptID;
@@ -61,12 +23,13 @@ public class UserClass implements Parcelable {
         this.lat = lat;
         this.lon = lon;
         this.leaveTime = leaveTime;
+        this.tripsTaken = tripsTaken;
     }
 
     public static ArrayList<UserClass> createInitialClassList(){
         ArrayList<UserClass> classList = new ArrayList<>();
-        classList.add(new UserClass("Mobile - Test", "Mark Sherriff", "CS", "4720", "100", "MWF 1:00PM - 1:50PM", "Olsson Hall 005", "38.031639", "-78.510811", "Recommended leave time: "));
-        classList.add(new UserClass("PDR - Test", "Mark Floryan", "CS", "2150", "100", "MWF 2:00PM - 2:50PM", "Rice 130", "38.034276", "-78.513005", "Recommended leave time: "));
+        classList.add(new UserClass("Mobile - Test", "Mark Sherriff", "CS", "4720", "100", "MWF 1:00PM - 1:50PM", "Olsson Hall 005", "38.031639", "-78.510811", 45900000, 1));
+        classList.add(new UserClass("PDR - Test", "Mark Floryan", "CS", "2150", "100", "MWF 2:00PM - 2:50PM", "Rice 130", "38.034276", "-78.513005", 49500000, 1));
         return classList;
     }
 
@@ -106,5 +69,15 @@ public class UserClass implements Parcelable {
         return lon;
     }
 
-    public String getLeaveTime() { return leaveTime; }
+    public long getLeaveTime() { return leaveTime; }
+
+    public long getTripsTaken() { return tripsTaken;}
+
+    public void setLeaveTime(long leaveTime) {
+        long totalTime = this.leaveTime + leaveTime;
+        Log.d("new totalTime: ", String.valueOf(totalTime));
+        this.tripsTaken++;
+        long totalTrips = this.tripsTaken;
+        this.leaveTime = totalTime / totalTrips;
+    }
 }

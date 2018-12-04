@@ -76,6 +76,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
         }
         gpsIntent.putExtra("lat", Class.getLat());
         gpsIntent.putExtra("lon",Class.getLon());
+        gpsIntent.putExtra("name", Class.getName());
         startActivityForResult(gpsIntent, GPS_RESULT);
     }
 
@@ -105,7 +106,8 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                         data.getStringExtra("location"),
                         data.getStringExtra("lat"),
                         data.getStringExtra("lon"),
-                        data.getStringExtra("leaveTime"));
+                        data.getLongExtra("leaveTime", 999),
+                        data.getLongExtra("tripsTaken", 999));
                 classList.add(c);
                 //TODO: Sort here or sort once when starting main activity??
                 rvClassList.getAdapter().notifyDataSetChanged();
@@ -128,7 +130,8 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                         data.getStringExtra("location"),
                         data.getStringExtra("lat"),
                         data.getStringExtra("lon"),
-                        data.getStringExtra("leaveTime"));
+                        data.getLongExtra("leaveTime", 999),
+                        data.getLongExtra("tripsTaken", 999));
                 classList.add(c);
                 classList.remove(data.getIntExtra("Position", 1000000000));
                 //TODO:Sort here or somewhere when main activity loads?
@@ -139,9 +142,13 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
         if(requestCode == GPS_RESULT){
             if(resultCode == RESULT_OK){
                 //TODO: Store associated (classStartTime(ms) - recordedTime) in class's startAt variable
+                for(UserClass user : classList){
+                    if(user.getName().equals(data.getStringExtra("name")))
+                        user.setLeaveTime(data.getLongExtra("leaveTime", 999));
+                }
 
                 //TODO:Sort here or somewhere when main activity loads?
-                rvClassList.getAdapter().notifyItemChanged(data.getIntExtra("Position", 1000000000));
+                rvClassList.getAdapter().notifyDataSetChanged();
             }
         }
     }
@@ -172,6 +179,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
             values.put("lat", saveClass.getLat());
             values.put("lon", saveClass.getLon());
             values.put("leaveTime", saveClass.getLeaveTime());
+            values.put("tripsTaken", saveClass.getTripsTaken());
             Log.d("works", saveClass.getName());
             Log.d("tag", values.toString());
             long newRowID;
@@ -193,8 +201,9 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
         String location = "";
         String lat = "";
         String lon = "";
-        String leaveTime = "";
-        String[] projection = {"name", "instructor", "deptID", "number", "section", "meetingTime", "location", "lat", "lon", "leaveTime"};
+        long leaveTime = 0;
+        long tripsTaken = 0;
+        String[] projection = {"name", "instructor", "deptID", "number", "section", "meetingTime", "location", "lat", "lon", "leaveTime", "tripsTaken"};
 
         Cursor cursor = db.query(
                 "Classes",
@@ -218,7 +227,8 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                 location = cursor.getString(cursor.getColumnIndexOrThrow("location"));
                 lat = cursor.getString(cursor.getColumnIndexOrThrow("lat"));
                 lon = cursor.getString(cursor.getColumnIndexOrThrow("lon"));
-                leaveTime = cursor.getString(cursor.getColumnIndexOrThrow("leaveTime"));
+                leaveTime = cursor.getLong(cursor.getColumnIndexOrThrow("leaveTime"));
+                tripsTaken = cursor.getLong(cursor.getColumnIndexOrThrow("tripsTaken"));
                 Log.d("works", name);
                 Log.d("works", instructor);
                 Log.d("works", deptID);
@@ -229,7 +239,7 @@ public class ClassCardViewActivity extends FragmentActivity implements View.OnCl
                 Log.d("works", lat);
                 Log.d("works", lon);
                 //Log.d("works", leaveTime);
-                UserClass newClass = new UserClass(name, instructor, deptID, number, section, meetingTime, location, lat, lon, leaveTime);
+                UserClass newClass = new UserClass(name, instructor, deptID, number, section, meetingTime, location, lat, lon, leaveTime, tripsTaken);
                 Log.d("Class", newClass.toString());
                 classList.add(newClass);
                 cursor.moveToNext();
