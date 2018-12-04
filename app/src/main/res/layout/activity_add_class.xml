@@ -5,16 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddClassActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Course Name"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"/>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="CS 1111"
         android:ems="10"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/courseEditText"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_marginTop="50dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Section Number"
+        android:layout_marginTop="100dp"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/sectionEditText"
+        android:textAlignment="center"
+        android:layout_marginTop="125dp"/>
 
     <Button
         android:text="Download Data"
@@ -23,71 +43,6 @@
         android:layout_below="@+id/courseEditText"
         android:layout_centerHorizontal="true"
         android:id="@+id/callWebServiceButton"
-        android:onClick="downloadData"/>
-
-    <TextView
-        android:text="Course Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/callWebServiceButton"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/courseNameTextView" />
-
-    <TextView
-        android:text="Instructor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/instructorTextView"
-        android:layout_below="@+id/courseNameTextView"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/departmentIDTextView"
-        android:layout_below="@+id/locationTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/courseNumberTextView"
-        android:layout_below="@+id/departmentIDTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sectionTextView"
-        android:layout_below="@+id/courseNumberTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/meetingTextView"
-        android:layout_below="@+id/sectionTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/latitudeTextView"
-        android:layout_below="@+id/meetingTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/longitudeTextView"
-        android:layout_below="@+id/latitudeTextView"
-        android:layout_centerHorizontal="true" />
-    <TextView
-        android:text="Location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/locationTextView"
-        android:layout_below="@+id/instructorTextView"
-        android:layout_centerHorizontal="true" />
+        android:onClick="downloadData"
+        android:layout_marginTop="150dp"/>
 </RelativeLayout>
