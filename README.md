@@ -14,3 +14,7 @@ Gps activity is launched from a button on the create account page for now. This 
 
 Thus, we have made progress on features including: Firebase integration, GPS, and consuming a web service. We have multiple activities, and our app is well on its way to being a wholistic, usable thing. Our next features to implement are the card explosions, editing a class, and storing trip data in sqlite.
 
+--------FINAL REPORT: 12/5/2018-------------
+Please refer to report pdf in root for necessary information.
+
+Enjoy the app!
