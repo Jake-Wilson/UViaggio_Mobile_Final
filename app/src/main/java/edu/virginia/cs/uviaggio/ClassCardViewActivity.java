@@ -1,10 +1,15 @@
 package edu.virginia.cs.uviaggio;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,13 +31,14 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
     static final int ADD_CLASS = 0;
     static final int EDIT_CLASS = 1;
     static final int GPS_RESULT = 2;
+    private static final int GPSPermission = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("UViaggio");
         getSupportActionBar().show();
-        classList = UserClass.createInitialClassList();
+        classList = new ArrayList<UserClass>();
         loadFromDatabase();
         setContentView(R.layout.activity_class_card_view);
         setTitle("Class List");
@@ -41,7 +47,11 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         ClassCardViewAdapter adapter = new ClassCardViewAdapter(this, classList, this);
         rvClassList.setAdapter(adapter);
         rvClassList.setLayoutManager(new LinearLayoutManager(this));
-
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPSPermission);
+        }
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
@@ -256,7 +266,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
                 classList.add(newClass);
                 cursor.moveToNext();
             }
-        } else{ classList = UserClass.createInitialClassList();}
+        }
         cursor.close();
     }
 }

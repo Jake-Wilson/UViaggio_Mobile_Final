@@ -36,18 +36,12 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
     Double currentLat;
     Double currentLon;
     long classStart;
-    private static final int GPSPermission = 1;
     long startTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        if (Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPSPermission);
-        }
         Intent in = this.getIntent();
 
         lat = Double.valueOf(in.getStringExtra("lat"));
@@ -119,7 +113,11 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         });
     }
-
+    @Override
+    public void onPause(){
+        super.onPause();
+        locationManager.removeUpdates(locationListenerGPS);
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
