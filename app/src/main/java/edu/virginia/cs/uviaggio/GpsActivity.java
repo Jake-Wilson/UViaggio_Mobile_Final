@@ -27,14 +27,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.security.Security;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.Timer;
-
 public class GpsActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Double lat, lon;
