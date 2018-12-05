@@ -62,30 +62,7 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
         lon = Double.valueOf(in.getStringExtra("lon"));
         classStart = in.getLongExtra("start", 0);
         name = in.getStringExtra("name");
-        if (ContextCompat.checkSelfPermission(GpsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGPS);
 
-        }
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        Button startTrack = findViewById(R.id.track);
-        startTrack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button b = (Button) v;
-                b.setText("Cancel Tracking");
-                startTracking(v);
-            }
-        });
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        LatLng notSydney = new LatLng(lat, lon);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListenerGPS = new LocationListener() {
             @Override
@@ -132,18 +109,39 @@ public class GpsActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         };
 
+        if (ContextCompat.checkSelfPermission(GpsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGPS);
+
+        }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        Button startTrack = findViewById(R.id.track);
+        startTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button b = (Button) v;
+                b.setText("Cancel Tracking");
+                startTracking(v);
+            }
+        });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng notSydney = new LatLng(lat, lon);
         mMap.addMarker(new MarkerOptions().position(notSydney).title(name)).showInfoWindow();
         try {
             mMap.setMyLocationEnabled(true);
+            Location location = locationManager.getLastKnownLocation(locationManager
+                    .getBestProvider(new Criteria(), false));
+            LatLng midpoint = new LatLng((notSydney.latitude + location.getLatitude()) / 2, (notSydney.longitude + location.getLongitude()) / 2);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midpoint, 15));
         }catch(SecurityException e){
             Log.e("error", e.getStackTrace().toString());
         }
-        Location location = locationManager.getLastKnownLocation(locationManager
-                .getBestProvider(new Criteria(), false));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("You")).showInfoWindow();
-        LatLng midpoint = new LatLng((notSydney.latitude + location.getLatitude()) / 2, (notSydney.longitude + location.getLongitude()) / 2);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(midpoint, 5));
-
     }
 
     public void startTracking(View view) {
