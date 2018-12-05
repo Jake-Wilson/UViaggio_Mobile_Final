@@ -1,10 +1,12 @@
 package edu.virginia.cs.uviaggio;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -124,17 +126,39 @@ public class ClassCardViewAdapter extends RecyclerView.Adapter<ClassCardViewAdap
         viewHolder.classListItem.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ViewHolder holder = (ViewHolder) v.getTag();
-                Integer spot = holder.getLayoutPosition();
-                DatabaseHelper mDBHelper = new DatabaseHelper(mContext);
-                SQLiteDatabase db = mDBHelper.getWritableDatabase();
-                String removeQuery = "DELETE FROM Classes WHERE name = \"" + classList.get(spot).getName() + "\"";
-                db.execSQL(removeQuery);
-                Log.d("removed item from db", removeQuery);
-                classList.remove(classList.get(spot));
-                notifyItemRemoved(spot);
-                //notifyItemRangeRemoved(spot,1);
-                //TODO: remove item from recycler view
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+                builder1.setMessage("Are you sure you wish to delete this class?");
+                builder1.setCancelable(true);
+                final View toDelete = v;
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ViewHolder holder = (ViewHolder) toDelete.getTag();
+                                Integer spot = holder.getLayoutPosition();
+                                DatabaseHelper mDBHelper = new DatabaseHelper(mContext);
+                                SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                                String removeQuery = "DELETE FROM Classes WHERE name = \"" + classList.get(spot).getName() + "\"";
+                                db.execSQL(removeQuery);
+                                Log.d("removed item from db", removeQuery);
+                                classList.remove(classList.get(spot));
+                                notifyItemRemoved(spot);
+                                dialog.cancel();
+                            }
+                        }
+                );
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }
+                );
+                AlertDialog alertDialog = builder1.create();
+                alertDialog.show();
                 return false;
             }
         });
