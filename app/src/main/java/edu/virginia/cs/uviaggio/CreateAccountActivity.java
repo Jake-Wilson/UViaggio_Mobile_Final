@@ -1,12 +1,14 @@
 package edu.virginia.cs.uviaggio;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,13 +22,18 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth mAuth;
     private EditText emailInput;
     private EditText passwordInput;
+    private TextView logoText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+        getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
+
+        logoText = findViewById(R.id.textView);
+        logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Pacifico-Regular.ttf"));
 
         //Define Views
         emailInput = findViewById(R.id.emailInput);

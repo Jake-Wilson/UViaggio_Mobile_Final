@@ -18,6 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +33,9 @@ import java.util.regex.Pattern;
 
 public class AddClassActivity extends AppCompatActivity {
     public static final String BASE_URL = "http://stardock.cs.virginia.edu/louslist/Courses/view/";
-    boolean classText = false;
-    boolean secText = false;
+    private boolean classText = false;
+    private boolean secText = false;
+    private String currentUserId;
     EditText courseEditText, sectionEditText;
     Button dl;
 
@@ -40,6 +43,7 @@ public class AddClassActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         courseEditText = (EditText) findViewById(R.id.courseEditText);
         sectionEditText = (EditText) findViewById(R.id.sectionEditText);
         dl = findViewById(R.id.callWebServiceButton);
@@ -112,6 +116,7 @@ public class AddClassActivity extends AppCompatActivity {
                         JSONObject ret = response.getJSONObject(i);
                         if (ret.get("section").toString().equals(sectionText)) {
                             Intent newClass = new Intent();
+                            newClass.putExtra("user", currentUserId);
                             newClass.putExtra("name", ret.get("courseName").toString());
                             newClass.putExtra("instructor", ret.get("instructor").toString());
                             newClass.putExtra("deptID", ret.get("deptID").toString());

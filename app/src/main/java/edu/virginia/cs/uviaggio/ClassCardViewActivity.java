@@ -18,6 +18,9 @@ import android.util.Log;
 import android.view.View;
 import android.support.design.widget.FloatingActionButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,14 +31,15 @@ import java.util.TimeZone;
 public class ClassCardViewActivity extends AppCompatActivity implements View.OnClickListener{
     public static ArrayList<UserClass> classList;
     public RecyclerView rvClassList;
+    private String currentUserId;
     static final int ADD_CLASS = 0;
-    static final int EDIT_CLASS = 1;
     static final int GPS_RESULT = 2;
     private static final int GPSPermission = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getSupportActionBar().setTitle("UViaggio");
         getSupportActionBar().show();
         classList = new ArrayList<UserClass>();
@@ -109,6 +113,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         if(requestCode == ADD_CLASS){
             if(resultCode == RESULT_OK){
                 UserClass c = new UserClass(
+                        data.getStringExtra("user"),
                         data.getStringExtra("name"),
                         data.getStringExtra("instructor"),
                         data.getStringExtra("deptID"),
@@ -128,30 +133,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
             }
         }
 
-        //editClass code
-        //TODO: Instead of removing/adding new, can we find a way to just edit existing?
-        // send rvclassLIst index in intent since sorting won't change
-        if(requestCode == EDIT_CLASS){
-            if(resultCode == RESULT_OK){
-                //Swap Items
-                UserClass c = new UserClass(
-                        data.getStringExtra("name"),
-                        data.getStringExtra("instructor"),
-                        data.getStringExtra("deptID"),
-                        data.getStringExtra("number"),
-                        data.getStringExtra("section"),
-                        data.getStringExtra("meetingTime"),
-                        data.getStringExtra("location"),
-                        data.getStringExtra("lat"),
-                        data.getStringExtra("lon"),
-                        data.getLongExtra("leaveTime", 999),
-                        data.getLongExtra("tripsTaken", 999));
-                classList.add(c);
-                classList.remove(data.getIntExtra("Position", 1000000000));
-                //TODO:Sort here or somewhere when main activity loads?
-                rvClassList.getAdapter().notifyItemChanged(data.getIntExtra("Position", 1000000000));
-            }
-        }
+
 
         if(requestCode == GPS_RESULT){
             if(resultCode == RESULT_OK){
@@ -190,6 +172,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         saveClass = classList.get(i);
         String selectString = "Select * From Classes WHERE name = " + "\"" + saveClass.getName() + "\"";
         if(db.rawQuery(selectString, null).getCount() == 0) {
+            values.put("user", saveClass.getUser());
             values.put("name", saveClass.getName());
             values.put("instructor", saveClass.getInstructor());
             values.put("deptID", saveClass.getDeptID());
@@ -214,6 +197,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         // Add code here to load from the database
         DatabaseHelper mDBHelper = new DatabaseHelper(this);
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        String user = "";
         String name = "";
         String instructor = "";
         String deptID = "";
@@ -225,13 +209,13 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         String lon = "";
         long leaveTime = 0;
         long tripsTaken = 0;
-        String[] projection = {"name", "instructor", "deptID", "number", "section", "meetingTime", "location", "lat", "lon", "leaveTime", "tripsTaken"};
+        String[] projection = {"user", "name", "instructor", "deptID", "number", "section", "meetingTime", "location", "lat", "lon", "leaveTime", "tripsTaken"};
 
         Cursor cursor = db.query(
                 "Classes",
                 projection,
-                null,
-                null,
+                "user = ?",
+                new String[]{currentUserId},
                 null,
                 null,
                 null
@@ -240,6 +224,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
             classList.clear();
             cursor.moveToFirst();
             for (int i = 0; i < cursor.getCount(); i++) {
+                user = cursor.getString(cursor.getColumnIndexOrThrow("user"));
                 name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
                 instructor = cursor.getString(cursor.getColumnIndexOrThrow("instructor"));
                 deptID = cursor.getString(cursor.getColumnIndexOrThrow("deptID"));
@@ -261,7 +246,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
                 Log.d("works", lat);
                 Log.d("works", lon);
                 //Log.d("works", leaveTime);
-                UserClass newClass = new UserClass(name, instructor, deptID, number, section, meetingTime, location, lat, lon, leaveTime, tripsTaken);
+                UserClass newClass = new UserClass(user, name, instructor, deptID, number, section, meetingTime, location, lat, lon, leaveTime, tripsTaken);
                 Log.d("Class", newClass.toString());
                 classList.add(newClass);
                 cursor.moveToNext();

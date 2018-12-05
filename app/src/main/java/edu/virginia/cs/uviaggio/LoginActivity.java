@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //Style Logo Text
         logoText = findViewById(R.id.textView);
         logoText.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Pacifico-Regular.ttf"));
-        //logoText.setTextSize(72);
 
         //Define views
         emailInput = findViewById(R.id.emailInput);
