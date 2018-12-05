@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.design.widget.FloatingActionButton;
 
@@ -45,7 +47,6 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         classList = new ArrayList<UserClass>();
         loadFromDatabase();
         setContentView(R.layout.activity_class_card_view);
-        setTitle("Class List");
         Log.d("List:", classList.toString());
         rvClassList = findViewById(R.id.rvClassList);
         ClassCardViewAdapter adapter = new ClassCardViewAdapter(this, classList, this);
@@ -60,6 +61,25 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
         fab.setOnClickListener(this);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.logOut) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(ClassCardViewActivity.this, LoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onPause(){
         super.onPause();

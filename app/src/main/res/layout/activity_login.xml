@@ -107,7 +107,7 @@
         android:layout_marginTop="64dp"
         android:text="UViaggio"
         android:textColor="@android:color/black"
-        android:textSize="72sp"
+        android:textSize="86sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"

@@ -29,7 +29,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
+        getSupportActionBar().setTitle("UViaggio");
+        getSupportActionBar().show();
 
         //Underline text
         TextView createAccountTextView = (TextView) findViewById(R.id.createAccountText);
@@ -45,6 +46,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         emailInput = findViewById(R.id.emailInput);
         passwordInput = findViewById(R.id.passwordInput);
 
+        Intent in = this.getIntent();
+        if(in != null){
+            emailInput.setText(in.getStringExtra("userEmail"));
+        }
         //Attach onclick listeners
         findViewById(R.id.loginButton).setOnClickListener(this);
         findViewById(R.id.createAccountText).setOnClickListener(this);

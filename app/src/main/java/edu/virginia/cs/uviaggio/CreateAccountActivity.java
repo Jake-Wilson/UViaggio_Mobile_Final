@@ -28,7 +28,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -45,26 +44,42 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     private void createAccount(String email, String password){
         //Check for validation of form!
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Create user success, update UI with the signed-in user's information
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user); -- Update UI here
-                            Toast.makeText(CreateAccountActivity.this, "Create Account Success!",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            // If create user fails, display a message to the user.
-                            Log.e("Creation failed", task.getException().toString());
-                            Toast.makeText(CreateAccountActivity.this, "Account Creation failed!", Toast.LENGTH_SHORT).show();
-                            //Update UI
+        if(!email.equals("") && !password.equals("") && email.contains("@") && password.length() >= 6) {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Create user success, update UI with the signed-in user's information
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Toast.makeText(CreateAccountActivity.this, "Account Creation Success!",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+                                intent.putExtra("userEmail", emailInput.getText().toString());
+                                startActivity(intent);
+                            } else {
+                                // If create user fails, display a message to the user.
+                                Log.e("Creation failed", task.getException().getMessage());
+                                Toast.makeText(CreateAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                //Update UI
+                            }
                         }
-                    }
 
-                });
+                    });
+        }else if(!email.equals("") && password.equals("")){
+            Toast.makeText(CreateAccountActivity.this, "Please enter a valid, secure password", Toast.LENGTH_LONG).show();
+        }else if(email.equals("") && !password.equals("")){
+            passwordInput.setText("");
+            Toast.makeText(CreateAccountActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
+        }else if(password.length() < 6) {
+            passwordInput.setText("");
+            Toast.makeText(CreateAccountActivity.this, "Please enter a valid, secure password longer than 6 characters", Toast.LENGTH_LONG).show();
+        }else if(!email.contains("@")) {
+            passwordInput.setText("");
+            Toast.makeText(CreateAccountActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(CreateAccountActivity.this, "Please enter valid account credentials", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onClick(View v){
@@ -73,8 +88,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             //Create account and return to signin page
             //TODO: Pre-populate signin credentials for just-created account
             createAccount(emailInput.getText().toString(), passwordInput.getText().toString());
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
         }
     }
 }
