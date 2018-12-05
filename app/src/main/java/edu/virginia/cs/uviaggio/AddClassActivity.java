@@ -43,7 +43,7 @@ public class AddClassActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
-        getSupportActionBar().setTitle("UViaggio");
+        getSupportActionBar().setTitle("UViaggio // Add a Class");
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         courseEditText = (EditText) findViewById(R.id.courseEditText);
         sectionEditText = (EditText) findViewById(R.id.sectionEditText);

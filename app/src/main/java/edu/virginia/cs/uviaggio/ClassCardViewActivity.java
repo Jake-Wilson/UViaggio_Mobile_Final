@@ -42,7 +42,7 @@ public class ClassCardViewActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        getSupportActionBar().setTitle("UViaggio");
+        getSupportActionBar().setTitle("UViaggio // Your Classes");
         getSupportActionBar().show();
         classList = new ArrayList<UserClass>();
         loadFromDatabase();

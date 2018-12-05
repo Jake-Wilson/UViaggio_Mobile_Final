@@ -28,6 +28,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+        getSupportActionBar().setTitle("UViaggio // Create an Account");
 
         mAuth = FirebaseAuth.getInstance();
 
