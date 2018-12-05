@@ -44,5 +44,6 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/callWebServiceButton"
         android:onClick="downloadData"
+        android:enabled="false"
         android:layout_marginTop="150dp"/>
 </RelativeLayout>
